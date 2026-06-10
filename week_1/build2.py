@@ -31,13 +31,23 @@ def run_chatbot():
     print("Chat started. Type 'exit' to quit.\n")
 
     while True:
-        # TODO: take user input
-        # TODO: append the user turn to messages
-        # TODO: call the API with the full messages list
-        # TODO: extract the assistant's reply
-        # TODO: append the assistant turn to messages
-        # TODO: print the reply
-        pass
+        prompt = input("[YOU] ")
+
+        if prompt.lower() in ("exit", "quit"):
+            print("Goodbye!")
+            break
+
+        messages.append({"role": "user", "content": prompt})
+
+        response = client.chat.completions.create(
+            model="openrouter/free",
+            messages=messages
+        )
+
+        assistant_reply = response.choices[0].message.content
+        messages.append({"role": "assistant", "content": assistant_reply})
+
+        print(f"[MODEL] {assistant_reply}\n")
 
 if __name__ == "__main__":
     run_chatbot()
